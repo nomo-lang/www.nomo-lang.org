@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { assetUrl, detectPlatform, platforms, releaseVersion } from "./release";
 
-describe("release metadata", () => {
+describe("website release metadata", () => {
   it("exposes the published preview for four targets", () => {
     expect(releaseVersion).toBe("0.0.0-20260720080715");
     expect(platforms).toHaveLength(4);

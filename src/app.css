@@ -1,3 +1,4 @@
+/* Global presentation shared by the prerendered SvelteKit route. */
 :root {
   color: #f4f2ed;
   background: #050608;
@@ -1297,4 +1298,3 @@ h2 em {
     scroll-behavior: auto !important;
   }
 }
-
