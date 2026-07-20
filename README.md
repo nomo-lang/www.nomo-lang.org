@@ -3,8 +3,8 @@
 The official public site for the Nomo programming language.
 
 The site introduces Nomo's design principles, shows its source-to-C99 build
-path, and links directly to the published preview binaries. It is a static
-React and TypeScript application built with Vite.
+path, and links directly to the published preview binaries. It is a statically
+prerendered SvelteKit and TypeScript application.
 
 ## Local development
 
@@ -35,10 +35,9 @@ path and does not publish a `CNAME` file.
 
 ## Content sources
 
-Release versions and asset names live in `src/data/release.ts`. Update them
+Release versions and asset names live in `src/lib/data/release.ts`. Update them
 from the corresponding signed release in
 [`nomo-lang/nomo`](https://github.com/nomo-lang/nomo/releases).
 
 Organization-wide contribution, security, and support guidance is inherited
 from [`nomo-lang/.github`](https://github.com/nomo-lang/.github).
-
