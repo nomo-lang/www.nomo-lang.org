@@ -28,7 +28,9 @@ pnpm run check:cloudflare
 
 The production target is Cloudflare Workers Static Assets. The checked-in
 `wrangler.jsonc` deploys the SvelteKit worker and its prerendered assets as one
-unit.
+unit. Cloudflare custom domains are declared in the same file; the canonical
+public origin is `https://www.nomo-lang.org` and the apex origin advertises that
+canonical URL.
 
 To test the production runtime locally:
 
@@ -40,6 +42,12 @@ After authenticating Wrangler with the target Cloudflare account, deploy with:
 
 ```sh
 pnpm run deploy
+```
+
+After the production deployment completes, run the HTTP acceptance smoke:
+
+```sh
+pnpm run smoke:production
 ```
 
 For Cloudflare Git integration, use `pnpm run build` as the build command and

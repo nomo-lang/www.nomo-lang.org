@@ -129,5 +129,9 @@
   "docs_link_language": "Language source and reference",
   "docs_link_rfcs": "RFC index",
   "docs_link_playground": "Open the playground",
-  "docs_back": "Back to Nomo"
+  "docs_back": "Back to Nomo",
+  "error_kicker": "NAVIGATION / {status}",
+  "error_title": "Page not found",
+  "error_description": "The page may have moved, or the address may be incomplete.",
+  "error_home": "Return to Nomo"
 }
