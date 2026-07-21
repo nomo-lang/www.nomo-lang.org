@@ -1,0 +1,108 @@
+import { m } from "./paraglide/messages.js";
+
+export function getWebsiteCopy() {
+  return {
+    meta: {
+      title: m.meta_title(),
+      description: m.meta_description(),
+      ogDescription: m.meta_og_description(),
+    },
+    skip: m.skip(),
+    home: m.home(),
+    primaryNavigation: m.primary_navigation(),
+    nav: [m.nav_docs(), m.nav_playground(), m.nav_ecosystem(), m.nav_github()],
+    switchLanguage: m.switch_language(),
+    getNomo: m.get_nomo(),
+    hero: {
+      signal: [m.hero_signal_index(), m.hero_signal_status()],
+      eyebrow: m.hero_eyebrow(),
+      title: [m.hero_title_primary(), m.hero_title_secondary()],
+      lede: m.hero_lede(),
+      download: m.hero_download(),
+      playground: m.hero_playground(),
+      preview: m.hero_preview(),
+      buildStages: m.hero_build_stages(),
+      output: m.hero_output(),
+      labels: [m.hero_label_nomo(), m.hero_label_c99(), m.hero_label_native()],
+      flow: [m.hero_flow_nomo(), m.hero_flow_c99(), m.hero_flow_native()],
+      factsLabel: m.hero_facts_label(),
+      facts: [
+        [m.hero_fact_output_label(), m.hero_fact_output_value()],
+        [m.hero_fact_failure_label(), m.hero_fact_failure_value()],
+        [m.hero_fact_default_label(), m.hero_fact_default_value()],
+        [m.hero_fact_license_label(), m.hero_fact_license_value()],
+      ],
+    },
+    principles: {
+      index: [m.principles_index(), m.principles_status()],
+      eyebrow: m.principles_eyebrow(),
+      title: [m.principles_title_primary(), m.principles_title_secondary()],
+      intro: m.principles_intro(),
+      items: [
+        [m.principle_small_title(), m.principle_small_body()],
+        [m.principle_explicit_title(), m.principle_explicit_body()],
+        [m.principle_failure_title(), m.principle_failure_body()],
+        [m.principle_build_title(), m.principle_build_body()],
+      ],
+      compilationPath: m.compilation_path(),
+      compilationStages: m.compilation_stages(),
+      stages: [m.compilation_source(), m.compilation_c99(), m.compilation_native()],
+      readRfcs: m.read_rfcs(),
+      toolchain: [m.toolchain_label(), m.toolchain_status()],
+      tools: [m.tool_format(), m.tool_check(), m.tool_build(), m.tool_run()],
+    },
+    download: {
+      index: [m.download_index(), m.download_status()],
+      published: m.download_published(),
+      title: [m.download_title_primary(), m.download_title_secondary()],
+      current: m.download_current(),
+      note: m.download_note(),
+      releaseNotes: m.download_release_notes(),
+      detected: m.download_detected(),
+      copied: m.download_copied(),
+      copy: m.download_copy(),
+      action: m.download_action(),
+      verify: m.download_verify(),
+      allAssets: m.download_all_assets(),
+      toolchain: m.download_toolchain(),
+      platforms: {
+        "mac-arm64": [m.platform_macos(), m.platform_macos_arm64()],
+        "mac-x64": [m.platform_macos(), m.platform_macos_x64()],
+        "linux-x64": [m.platform_linux(), m.platform_linux_x64()],
+        "windows-x64": [m.platform_windows(), m.platform_windows_x64()],
+      },
+    },
+    ecosystem: {
+      index: [m.ecosystem_index(), m.ecosystem_status()],
+      title: [m.ecosystem_title_primary(), m.ecosystem_title_secondary()],
+      intro: m.ecosystem_intro(),
+      links: [
+        [
+          m.ecosystem_language_label(),
+          m.ecosystem_language_title(),
+          m.ecosystem_language_description(),
+        ],
+        [
+          m.ecosystem_playground_label(),
+          m.ecosystem_playground_title(),
+          m.ecosystem_playground_description(),
+        ],
+        [
+          m.ecosystem_design_label(),
+          m.ecosystem_design_title(),
+          m.ecosystem_design_description(),
+        ],
+      ],
+    },
+    footer: {
+      tagline: [m.footer_tagline_primary(), m.footer_tagline_secondary()],
+      links: [
+        m.footer_github(),
+        m.footer_contribute(),
+        m.footer_security(),
+        m.footer_license(),
+      ],
+      copyright: m.footer_copyright(),
+    },
+  };
+}

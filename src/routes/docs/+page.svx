@@ -1,0 +1,80 @@
+<script lang="ts">
+  import { m } from "$lib/paraglide/messages.js";
+</script>
+
+<svelte:head>
+  <title>{m.docs_meta_title()}</title>
+  <meta name="description" content={m.docs_meta_description()} />
+  <meta property="og:title" content={m.docs_meta_title()} />
+  <meta property="og:description" content={m.docs_meta_description()} />
+  <link rel="alternate" hreflang="en" href="/docs/" />
+  <link rel="alternate" hreflang="zh-CN" href="/zh/docs/" />
+  <link rel="alternate" hreflang="x-default" href="/docs/" />
+</svelte:head>
+
+<p class="docs-kicker">{m.docs_kicker()}</p>
+<h1>{m.docs_title()}</h1>
+<p class="docs-lede">{m.docs_intro()}</p>
+
+<aside class="docs-callout">
+  <strong>{m.docs_status_title()}</strong>
+  <p>{m.docs_status_body()}</p>
+</aside>
+
+<h2>{m.docs_quickstart_title()}</h2>
+<p>{m.docs_quickstart_intro()}</p>
+
+```sh
+nomo --version
+nomo check hello.nomo
+```
+
+<h2>{m.docs_create_title()}</h2>
+<p>{m.docs_create_body()}</p>
+
+```nomo
+package app.main
+
+import std.io
+
+fn main() -> void {
+    io.println("Hello, Nomo")
+}
+```
+
+<h2>{m.docs_run_title()}</h2>
+<p>{m.docs_run_body()}</p>
+
+```sh
+nomo fmt hello.nomo
+nomo check hello.nomo
+nomo build hello.nomo
+nomo run hello.nomo
+```
+
+<h2>{m.docs_language_title()}</h2>
+<p>{m.docs_language_body()}</p>
+
+<h2>{m.docs_packages_title()}</h2>
+<p>{m.docs_packages_body()}</p>
+
+<h2>{m.docs_next_title()}</h2>
+<p>{m.docs_next_body()}</p>
+
+<ul class="docs-links">
+  <li>
+    <a href="https://github.com/nomo-lang/nomo">
+      {m.docs_link_language()} <span aria-hidden="true">↗</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/nomo-lang/nomo/tree/main/docs/rfcs">
+      {m.docs_link_rfcs()} <span aria-hidden="true">↗</span>
+    </a>
+  </li>
+  <li>
+    <a href="https://nomo-lang.github.io/nomo-playground/">
+      {m.docs_link_playground()} <span aria-hidden="true">↗</span>
+    </a>
+  </li>
+</ul>
