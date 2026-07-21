@@ -18,7 +18,7 @@ for (const [pathname, marker] of pages) {
 
 const home = await (await fetch(base)).text();
 for (const href of [
-  "https://playground.nomo-lang.org/",
+  "https://play.nomo-lang.org/",
   "https://github.com/nomo-lang/rfcs",
   'rel="canonical" href="https://www.nomo-lang.org/"',
 ]) {

@@ -90,7 +90,7 @@ nomo run hello.nomo
     </a>
   </li>
   <li>
-    <a href="https://playground.nomo-lang.org/">
+    <a href="https://play.nomo-lang.org/">
       {m.docs_link_playground()} <span aria-hidden="true">↗</span>
     </a>
   </li>
