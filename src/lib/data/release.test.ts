@@ -3,7 +3,7 @@ import { assetUrl, detectPlatform, platforms, releaseVersion } from "./release";
 
 describe("website release metadata", () => {
   it("exposes the published preview for four targets", () => {
-    expect(releaseVersion).toBe("0.0.0-20260720080715");
+    expect(releaseVersion).toBe("0.0.0-20260721120555");
     expect(platforms).toHaveLength(4);
     expect(new Set(platforms.map(({ id }) => id)).size).toBe(4);
   });

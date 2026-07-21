@@ -1,5 +1,5 @@
 // Release data is framework-neutral so it can be validated independently.
-export const releaseVersion = "0.0.0-20260720080715";
+export const releaseVersion = "0.0.0-20260721120555";
 export const releaseTag = `v${releaseVersion}`;
 export const releaseUrl = `https://github.com/nomo-lang/nomo/releases/tag/${releaseTag}`;
 export const releaseDownloadBase = `https://github.com/nomo-lang/nomo/releases/download/${releaseTag}`;
