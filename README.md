@@ -49,8 +49,18 @@ For Cloudflare Git integration, use `pnpm run build` as the build command and
 ## Internationalization
 
 English is served at `/` and Simplified Chinese at `/zh/`. Both variants are
-prerendered, set the correct document language, and share one typed message
-catalog in `src/lib/i18n.ts`.
+prerendered and set the correct document language. Internationalization uses
+the official Svelte Paraglide add-on: source messages live in
+`messages/en.json` and `messages/zh.json`, locale configuration lives in
+`project.inlang/settings.json`, and the generated type-safe runtime under
+`src/lib/paraglide` is not committed.
+
+## Documentation
+
+The localized documentation entry points are `/docs/` and `/zh/docs/`.
+Documentation pages use mdsvex, so Markdown code fences and Svelte components
+can live in the same `.svx` source. User-facing prose remains in the Paraglide
+message catalogs to keep both locales in sync.
 
 ## Content sources
 

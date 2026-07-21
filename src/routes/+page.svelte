@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { page } from "$app/state";
   import { onMount } from "svelte";
 
   import ArrowIcon from "$lib/components/ArrowIcon.svelte";
-  import { localeHref, messages, toLocale } from "$lib/i18n";
+  import { getWebsiteCopy } from "$lib/copy";
   import {
     assetUrl,
     detectPlatform,
@@ -13,6 +12,7 @@
     type Platform,
     type PlatformId,
   } from "$lib/data/release";
+  import { getLocale, localizeHref } from "$lib/paraglide/runtime";
 
   type CodeView = "nomo" | "c99" | "native";
   type CodeToken = {
@@ -74,7 +74,7 @@
   };
 
   const navHrefs = [
-    "https://github.com/nomo-lang/nomo/tree/main/docs",
+    "/docs/",
     "https://nomo-lang.github.io/nomo-playground/",
     "#ecosystem",
     "https://github.com/nomo-lang",
@@ -86,15 +86,18 @@
     "https://github.com/nomo-lang/nomo/tree/main/docs/rfcs",
   ];
 
-  let locale = $derived(toLocale(page.params.lang));
-  let copy = $derived(messages[locale]);
+  let locale = $derived(getLocale());
+  let copy = $derived(getWebsiteCopy());
   let labels = $derived<Record<CodeView, string>>({
     nomo: copy.hero.labels[0],
     c99: copy.hero.labels[1],
     native: copy.hero.labels[2],
   });
   let navItems = $derived(
-    copy.nav.map((label, index) => ({ label, href: navHrefs[index] })),
+    copy.nav.map((label, index) => ({
+      label,
+      href: index === 0 ? localizeHref(navHrefs[index]) : navHrefs[index],
+    })),
   );
   let principles = $derived(
     copy.principles.items.map(([title, body], index) => ({
@@ -187,7 +190,7 @@
     <a
       class="locale-link"
       data-sveltekit-reload
-      href={localeHref(locale === "en" ? "zh" : "en")}
+      href={localizeHref("/", { locale: locale === "en" ? "zh" : "en" })}
     >
       {copy.switchLanguage}
     </a>
