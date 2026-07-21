@@ -75,14 +75,14 @@
 
   const navHrefs = [
     "/docs/",
-    "https://playground.nomo-lang.org/",
+    "https://play.nomo-lang.org/",
     "#ecosystem",
     "https://github.com/nomo-lang",
   ];
   const toolCommands = ["nomo fmt", "nomo check", "nomo build", "nomo run"];
   const ecosystemHrefs = [
     "https://github.com/nomo-lang/nomo",
-    "https://playground.nomo-lang.org/",
+    "https://play.nomo-lang.org/",
     "https://github.com/nomo-lang/rfcs",
   ];
 
@@ -233,7 +233,7 @@
             {copy.hero.download}
             <ArrowIcon />
           </a>
-          <a class="text-link" href="https://playground.nomo-lang.org/">
+          <a class="text-link" href="https://play.nomo-lang.org/">
             {copy.hero.playground}
             <ArrowIcon />
           </a>
