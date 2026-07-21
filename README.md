@@ -4,34 +4,53 @@ The official public site for the Nomo programming language.
 
 The site introduces Nomo's design principles, shows its source-to-C99 build
 path, and links directly to the published preview binaries. It is a statically
-prerendered SvelteKit and TypeScript application.
+prerendered SvelteKit and TypeScript application deployed on Cloudflare.
 
 ## Local development
 
-Requires Node.js 24 and npm.
+Requires Node.js 24 and pnpm 11.
 
 ```sh
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 Before opening a pull request, run the same checks used by CI:
 
 ```sh
-npm run lint
-npm test
-npm run build
+pnpm run lint
+pnpm test
+pnpm run build
+pnpm run check:cloudflare
 ```
 
 ## Deployment
 
-Merges to `main` deploy through GitHub Actions to the project Pages URL:
+The production target is Cloudflare Workers Static Assets. The checked-in
+`wrangler.jsonc` deploys the SvelteKit worker and its prerendered assets as one
+unit.
 
-<https://nomo-lang.github.io/www.nomo-lang.org/>
+To test the production runtime locally:
 
-The custom `www.nomo-lang.org` domain will be configured after its DNS records
-exist. Until then, the Pages workflow deliberately uses the repository base
-path and does not publish a `CNAME` file.
+```sh
+pnpm run preview
+```
+
+After authenticating Wrangler with the target Cloudflare account, deploy with:
+
+```sh
+pnpm run deploy
+```
+
+For Cloudflare Git integration, use `pnpm run build` as the build command and
+`pnpm exec wrangler deploy` as the deploy command. The generated output lives in
+`.svelte-kit/cloudflare` and is served from the domain root.
+
+## Internationalization
+
+English is served at `/` and Simplified Chinese at `/zh/`. Both variants are
+prerendered, set the correct document language, and share one typed message
+catalog in `src/lib/i18n.ts`.
 
 ## Content sources
 

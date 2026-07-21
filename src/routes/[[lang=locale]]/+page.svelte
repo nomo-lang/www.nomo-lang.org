@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { page } from "$app/state";
   import { onMount } from "svelte";
 
   import ArrowIcon from "$lib/components/ArrowIcon.svelte";
+  import { localeHref, messages, toLocale } from "$lib/i18n";
   import {
     assetUrl,
     detectPlatform,
@@ -71,75 +73,50 @@
     ],
   };
 
-  const labels: Record<CodeView, string> = {
-    nomo: "Nomo",
-    c99: "Readable C99",
-    native: "Native",
-  };
-
-  const navItems = [
-    {
-      label: "Docs",
-      href: "https://github.com/nomo-lang/nomo/tree/main/docs",
-    },
-    {
-      label: "Playground",
-      href: "https://nomo-lang.github.io/nomo-playground/",
-    },
-    { label: "Ecosystem", href: "#ecosystem" },
-    { label: "GitHub", href: "https://github.com/nomo-lang" },
+  const navHrefs = [
+    "https://github.com/nomo-lang/nomo/tree/main/docs",
+    "https://nomo-lang.github.io/nomo-playground/",
+    "#ecosystem",
+    "https://github.com/nomo-lang",
+  ];
+  const toolCommands = ["nomo fmt", "nomo check", "nomo build", "nomo run"];
+  const ecosystemHrefs = [
+    "https://github.com/nomo-lang/nomo",
+    "https://nomo-lang.github.io/nomo-playground/",
+    "https://github.com/nomo-lang/nomo/tree/main/docs/rfcs",
   ];
 
-  const principles = [
-    {
-      number: "01",
-      title: "Small before powerful",
-      body: "A compact language surface is easier to learn, audit, and maintain. New features must earn their place.",
-    },
-    {
-      number: "02",
-      title: "Explicit over magic",
-      body: "Control flow, mutation, and failure stay visible. The code should tell you what the program can do.",
-    },
-    {
-      number: "03",
-      title: "No null. No exceptions.",
-      body: "Recoverable failure travels through Result. Programming defects stop through panic instead of hidden unwinding.",
-    },
-    {
-      number: "04",
-      title: "Inspect the whole build",
-      body: "Nomo emits readable C99 before linking, keeping generated code and the native toolchain in reach.",
-    },
-  ];
-
-  const toolchain = [
-    ["nomo fmt", "Stable source formatting"],
-    ["nomo check", "Parse and type-check"],
-    ["nomo build", "Emit C99 and link"],
-    ["nomo run", "Build and execute"],
-  ];
-
-  const ecosystemLinks = [
-    {
-      label: "Language",
-      title: "Compiler & standard library",
-      description: "Read the source, follow the roadmap, or open an issue.",
-      href: "https://github.com/nomo-lang/nomo",
-    },
-    {
-      label: "Try it",
-      title: "Browser playground",
-      description: "Explore real syntax with instant examples and diagnostics.",
-      href: "https://nomo-lang.github.io/nomo-playground/",
-    },
-    {
-      label: "Design",
-      title: "RFC index",
-      description: "See the decisions shaping packages, builds, and operations.",
-      href: "https://github.com/nomo-lang/nomo/tree/main/docs/rfcs",
-    },
-  ];
+  let locale = $derived(toLocale(page.params.lang));
+  let copy = $derived(messages[locale]);
+  let labels = $derived<Record<CodeView, string>>({
+    nomo: copy.hero.labels[0],
+    c99: copy.hero.labels[1],
+    native: copy.hero.labels[2],
+  });
+  let navItems = $derived(
+    copy.nav.map((label, index) => ({ label, href: navHrefs[index] })),
+  );
+  let principles = $derived(
+    copy.principles.items.map(([title, body], index) => ({
+      number: String(index + 1).padStart(2, "0"),
+      title,
+      body,
+    })),
+  );
+  let toolchain = $derived(
+    toolCommands.map((command, index) => [
+      command,
+      copy.principles.tools[index],
+    ]),
+  );
+  let ecosystemLinks = $derived(
+    copy.ecosystem.links.map(([label, title, description], index) => ({
+      label,
+      title,
+      description,
+      href: ecosystemHrefs[index],
+    })),
+  );
 
   let active = $state<CodeView>("nomo");
   let detected = $state<PlatformId>();
@@ -185,68 +162,67 @@
 </script>
 
 <svelte:head>
-  <title>Nomo — Small language. Native programs.</title>
-  <meta
-    name="description"
-    content="Nomo is a small, explicit programming language that compiles to readable C99 and native programs."
-  />
-  <meta
-    property="og:title"
-    content="Nomo — Small language. Native programs."
-  />
-  <meta
-    property="og:description"
-    content="A small, explicit programming language for systems tools, CLIs, and small services."
-  />
+  <title>{copy.meta.title}</title>
+  <meta name="description" content={copy.meta.description} />
+  <meta property="og:title" content={copy.meta.title} />
+  <meta property="og:description" content={copy.meta.ogDescription} />
+  <link rel="alternate" hreflang="en" href="/" />
+  <link rel="alternate" hreflang="zh-CN" href="/zh/" />
+  <link rel="alternate" hreflang="x-default" href="/" />
 </svelte:head>
 
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">{copy.skip}</a>
 
 <header class="site-header">
-  <a class="wordmark" href="#top" aria-label="Nomo home">
+  <a class="wordmark" href="#top" aria-label={copy.home}>
     <span class="wordmark__mark" aria-hidden="true">N</span>
     <span>Nomo</span>
   </a>
-  <nav class="site-nav" aria-label="Primary navigation">
+  <nav class="site-nav" aria-label={copy.primaryNavigation}>
     {#each navItems as item (item.label)}
       <a href={item.href}>{item.label}</a>
     {/each}
   </nav>
-  <a class="header-action" href="#download">
-    Get Nomo
-    <ArrowIcon direction="down" />
-  </a>
+  <div class="header-tools">
+    <a
+      class="locale-link"
+      data-sveltekit-reload
+      href={localeHref(locale === "en" ? "zh" : "en")}
+    >
+      {copy.switchLanguage}
+    </a>
+    <a class="header-action" href="#download">
+      {copy.getNomo}
+      <ArrowIcon direction="down" />
+    </a>
+  </div>
 </header>
 
 <main id="main">
   <section class="hero" id="top">
     <div class="hero__signal">
-      <span>01 / LANGUAGE</span>
-      <span>EARLY PREVIEW</span>
+      <span>{copy.hero.signal[0]}</span>
+      <span>{copy.hero.signal[1]}</span>
     </div>
     <div class="hero__content">
       <div class="hero__copy">
-        <p class="eyebrow">A language for the code you need to trust</p>
+        <p class="eyebrow">{copy.hero.eyebrow}</p>
         <h1>
-          Small language.
+          {copy.hero.title[0]}
           <br />
-          <em>Native programs.</em>
+          <em>{copy.hero.title[1]}</em>
         </h1>
-        <p class="hero__lede">
-          Nomo is a small, explicit programming language for systems tools,
-          CLIs, and small services. It compiles to readable C99, then to a
-          native executable you can inspect.
-        </p>
+        <p class="hero__lede">{copy.hero.lede}</p>
         <div class="hero__actions">
           <a class="button button--primary" href="#download">
-            Download the preview
+            {copy.hero.download}
             <ArrowIcon />
           </a>
           <a
             class="text-link"
             href="https://nomo-lang.github.io/nomo-playground/"
           >
-            Open playground
+            {copy.hero.playground}
             <ArrowIcon />
           </a>
         </div>
@@ -257,13 +233,13 @@
           <span>hello.nomo</span>
           <span class="code-frame__status">
             <i aria-hidden="true"></i>
-            preview
+            {copy.hero.preview}
           </span>
         </div>
         <div
           class="code-frame__tabs"
           role="tablist"
-          aria-label="Build stages"
+          aria-label={copy.hero.buildStages}
         >
           {#each Object.keys(labels) as view (view)}
             <button
@@ -278,7 +254,7 @@
           {/each}
         </div>
         <div
-          aria-label="{labels[active]} output"
+          aria-label={`${labels[active]} ${copy.hero.output}`}
           class="code-frame__body"
           role="tabpanel"
         >
@@ -298,51 +274,37 @@
           </code>
         </div>
         <div class="code-frame__footer">
-          <span>Nomo source</span>
+          <span>{copy.hero.flow[0]}</span>
           <span aria-hidden="true">→</span>
-          <span>C99</span>
+          <span>{copy.hero.flow[1]}</span>
           <span aria-hidden="true">→</span>
-          <span>native executable</span>
+          <span>{copy.hero.flow[2]}</span>
         </div>
       </div>
     </div>
-    <div class="hero__facts" aria-label="Nomo at a glance">
-      <div>
-        <span>OUTPUT</span>
-        <strong>Readable C99</strong>
-      </div>
-      <div>
-        <span>FAILURE</span>
-        <strong>Result, not exceptions</strong>
-      </div>
-      <div>
-        <span>DEFAULT</span>
-        <strong>Immutable values</strong>
-      </div>
-      <div>
-        <span>LICENSE</span>
-        <strong>Apache-2.0</strong>
-      </div>
+    <div class="hero__facts" aria-label={copy.hero.factsLabel}>
+      {#each copy.hero.facts as fact (fact[0])}
+        <div>
+          <span>{fact[0]}</span>
+          <strong>{fact[1]}</strong>
+        </div>
+      {/each}
     </div>
   </section>
 
   <section class="principles section-shell" id="principles">
     <div class="section-index">
-      <span>02 / PRINCIPLES</span>
-      <span>DESIGNED TO STAY LEGIBLE</span>
+      <span>{copy.principles.index[0]}</span>
+      <span>{copy.principles.index[1]}</span>
     </div>
     <div class="principles__heading">
-      <p class="eyebrow">Language design</p>
+      <p class="eyebrow">{copy.principles.eyebrow}</p>
       <h2>
-        Explicit
+        {copy.principles.title[0]}
         <br />
-        <em>by design.</em>
+        <em>{copy.principles.title[1]}</em>
       </h2>
-      <p>
-        Nomo aims for code that remains understandable from source file to
-        emitted C. Its constraints are part of the product, not temporary
-        omissions.
-      </p>
+      <p>{copy.principles.intro}</p>
     </div>
     <div class="principle-list">
       {#each principles as principle (principle.number)}
@@ -356,38 +318,38 @@
     </div>
     <div class="build-story">
       <div class="build-story__flow">
-        <p class="eyebrow">Compilation path</p>
-        <div class="flow-diagram" aria-label="Nomo compilation stages">
+        <p class="eyebrow">{copy.principles.compilationPath}</p>
+        <div class="flow-diagram" aria-label={copy.principles.compilationStages}>
           <div>
             <span>01</span>
             <strong>.nomo</strong>
-            <small>source</small>
+            <small>{copy.principles.stages[0]}</small>
           </div>
           <i aria-hidden="true"></i>
           <div>
             <span>02</span>
             <strong>.c</strong>
-            <small>readable C99</small>
+            <small>{copy.principles.stages[1]}</small>
           </div>
           <i aria-hidden="true"></i>
           <div>
             <span>03</span>
             <strong>bin</strong>
-            <small>native</small>
+            <small>{copy.principles.stages[2]}</small>
           </div>
         </div>
         <a
           class="text-link"
           href="https://github.com/nomo-lang/nomo/tree/main/docs/rfcs"
         >
-          Read the RFCs
+          {copy.principles.readRfcs}
           <ArrowIcon />
         </a>
       </div>
       <div class="toolchain">
         <div class="toolchain__title">
-          <span>TOOLCHAIN</span>
-          <span>ONE COMMAND AWAY</span>
+          <span>{copy.principles.toolchain[0]}</span>
+          <span>{copy.principles.toolchain[1]}</span>
         </div>
         {#each toolchain as [command, description] (command)}
           <div class="toolchain__row">
@@ -401,27 +363,24 @@
 
   <section class="download section-shell" id="download">
     <div class="section-index">
-      <span>03 / DOWNLOAD</span>
-      <span>FIRST PUBLIC PREVIEW</span>
+      <span>{copy.download.index[0]}</span>
+      <span>{copy.download.index[1]}</span>
     </div>
     <div class="download__intro">
       <div>
-        <p class="eyebrow">Published July 20, 2026</p>
+        <p class="eyebrow">{copy.download.published}</p>
         <h2>
-          Build something
+          {copy.download.title[0]}
           <br />
-          <em>you can inspect.</em>
+          <em>{copy.download.title[1]}</em>
         </h2>
       </div>
       <div class="release-note">
-        <span>CURRENT PREVIEW</span>
+        <span>{copy.download.current}</span>
         <strong>{releaseTag}</strong>
-        <p>
-          Early software. Expect sharp edges, fast changes, and an evolving
-          standard library.
-        </p>
+        <p>{copy.download.note}</p>
         <a href={releaseUrl}>
-          Release notes
+          {copy.download.releaseNotes}
           <ArrowIcon />
         </a>
       </div>
@@ -433,10 +392,10 @@
           class:is-recommended={platform.id === detected}
         >
           <div class="download-row__platform">
-            <strong>{platform.label}</strong>
-            <span>{platform.detail}</span>
+            <strong>{copy.download.platforms[platform.id][0]}</strong>
+            <span>{copy.download.platforms[platform.id][1]}</span>
             {#if platform.id === detected}
-              <small>Detected for this device</small>
+              <small>{copy.download.detected}</small>
             {/if}
           </div>
           <code>{platform.archive}</code>
@@ -445,10 +404,12 @@
               onclick={() => void copyCommand(platform)}
               type="button"
             >
-              {copiedId === platform.id ? "Copied" : "Copy command"}
+              {copiedId === platform.id
+                ? copy.download.copied
+                : copy.download.copy}
             </button>
             <a href={assetUrl(platform.archive)}>
-              Download
+              {copy.download.action}
               <ArrowIcon direction="down" />
             </a>
           </div>
@@ -457,32 +418,29 @@
     </div>
     <div class="download__meta">
       <a href={assetUrl("SHA256SUMS")}>
-        Verify with SHA256SUMS
+        {copy.download.verify}
         <ArrowIcon />
       </a>
       <a href={releaseUrl}>
-        View all release assets
+        {copy.download.allAssets}
         <ArrowIcon />
       </a>
-      <span>Source builds require a C99 toolchain.</span>
+      <span>{copy.download.toolchain}</span>
     </div>
   </section>
 
   <section class="ecosystem section-shell" id="ecosystem">
     <div class="section-index">
-      <span>04 / ECOSYSTEM</span>
-      <span>BUILT IN THE OPEN</span>
+      <span>{copy.ecosystem.index[0]}</span>
+      <span>{copy.ecosystem.index[1]}</span>
     </div>
     <div class="ecosystem__heading">
       <h2>
-        Follow the work.
+        {copy.ecosystem.title[0]}
         <br />
-        <em>Shape what comes next.</em>
+        <em>{copy.ecosystem.title[1]}</em>
       </h2>
-      <p>
-        Nomo grows through executable examples, tests, and small RFCs. The
-        repositories are public before the language is finished.
-      </p>
+      <p>{copy.ecosystem.intro}</p>
     </div>
     <div class="ecosystem__links">
       {#each ecosystemLinks as link, index (link.title)}
@@ -502,20 +460,22 @@
   <div class="site-footer__wordmark" aria-hidden="true">NOMO</div>
   <div class="site-footer__meta">
     <p>
-      A small language for
+      {copy.footer.tagline[0]}
       <br />
-      inspectable native software.
+      {copy.footer.tagline[1]}
     </p>
     <div>
-      <a href="https://github.com/nomo-lang">GitHub</a>
+      <a href="https://github.com/nomo-lang">{copy.footer.links[0]}</a>
       <a href="https://github.com/nomo-lang/nomo/blob/main/CONTRIBUTING.md">
-        Contribute
+        {copy.footer.links[1]}
       </a>
       <a href="https://github.com/nomo-lang/.github/blob/main/SECURITY.md">
-        Security
+        {copy.footer.links[2]}
       </a>
-      <a href="https://github.com/nomo-lang/nomo/blob/main/LICENSE">License</a>
+      <a href="https://github.com/nomo-lang/nomo/blob/main/LICENSE">
+        {copy.footer.links[3]}
+      </a>
     </div>
-    <span>© 2026 Nomo contributors</span>
+    <span>{copy.footer.copyright}</span>
   </div>
 </footer>

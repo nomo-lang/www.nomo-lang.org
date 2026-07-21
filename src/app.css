@@ -120,6 +120,7 @@ button {
 }
 
 .site-nav a,
+.locale-link,
 .header-action {
   color: #b6bac1;
   font: 500 11px/1 var(--mono);
@@ -128,13 +129,24 @@ button {
   transition: color 150ms ease;
 }
 
-.site-nav a:hover {
+.site-nav a:hover,
+.locale-link:hover {
   color: var(--ink);
+}
+
+.header-tools {
+  display: flex;
+  justify-self: end;
+  align-items: center;
+  gap: clamp(16px, 2vw, 28px);
+}
+
+.locale-link {
+  color: #777c84;
 }
 
 .header-action {
   display: inline-flex;
-  justify-self: end;
   align-items: center;
   gap: 9px;
   color: var(--ink);
@@ -1010,6 +1022,10 @@ h2 em {
   }
 
   .header-action {
+    font-size: 9px;
+  }
+
+  .locale-link {
     font-size: 9px;
   }
 
