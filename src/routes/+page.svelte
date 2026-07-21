@@ -75,15 +75,15 @@
 
   const navHrefs = [
     "/docs/",
-    "https://nomo-lang.github.io/nomo-playground/",
+    "https://playground.nomo-lang.org/",
     "#ecosystem",
     "https://github.com/nomo-lang",
   ];
   const toolCommands = ["nomo fmt", "nomo check", "nomo build", "nomo run"];
   const ecosystemHrefs = [
     "https://github.com/nomo-lang/nomo",
-    "https://nomo-lang.github.io/nomo-playground/",
-    "https://github.com/nomo-lang/nomo/tree/main/docs/rfcs",
+    "https://playground.nomo-lang.org/",
+    "https://github.com/nomo-lang/rfcs",
   ];
 
   let locale = $derived(getLocale());
@@ -169,9 +169,21 @@
   <meta name="description" content={copy.meta.description} />
   <meta property="og:title" content={copy.meta.title} />
   <meta property="og:description" content={copy.meta.ogDescription} />
-  <link rel="alternate" hreflang="en" href="/" />
-  <link rel="alternate" hreflang="zh-CN" href="/zh/" />
-  <link rel="alternate" hreflang="x-default" href="/" />
+  <link
+    rel="canonical"
+    href={`https://www.nomo-lang.org${localizeHref("/")}`}
+  />
+  <link rel="alternate" hreflang="en" href="https://www.nomo-lang.org/" />
+  <link
+    rel="alternate"
+    hreflang="zh-CN"
+    href="https://www.nomo-lang.org/zh/"
+  />
+  <link
+    rel="alternate"
+    hreflang="x-default"
+    href="https://www.nomo-lang.org/"
+  />
 </svelte:head>
 
 <a class="skip-link" href="#main">{copy.skip}</a>
@@ -221,10 +233,7 @@
             {copy.hero.download}
             <ArrowIcon />
           </a>
-          <a
-            class="text-link"
-            href="https://nomo-lang.github.io/nomo-playground/"
-          >
+          <a class="text-link" href="https://playground.nomo-lang.org/">
             {copy.hero.playground}
             <ArrowIcon />
           </a>
@@ -343,7 +352,7 @@
         </div>
         <a
           class="text-link"
-          href="https://github.com/nomo-lang/nomo/tree/main/docs/rfcs"
+          href="https://github.com/nomo-lang/rfcs"
         >
           {copy.principles.readRfcs}
           <ArrowIcon />

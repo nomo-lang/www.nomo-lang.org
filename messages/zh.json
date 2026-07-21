@@ -129,5 +129,9 @@
   "docs_link_language": "语言源码与参考",
   "docs_link_rfcs": "RFC 索引",
   "docs_link_playground": "打开 Playground",
-  "docs_back": "返回 Nomo"
+  "docs_back": "返回 Nomo",
+  "error_kicker": "导航 / {status}",
+  "error_title": "页面未找到",
+  "error_description": "页面可能已移动，或地址不完整。",
+  "error_home": "返回 Nomo 首页"
 }

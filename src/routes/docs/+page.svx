@@ -1,5 +1,6 @@
 <script lang="ts">
   import { m } from "$lib/paraglide/messages.js";
+  import { localizeHref } from "$lib/paraglide/runtime";
 </script>
 
 <svelte:head>
@@ -7,9 +8,25 @@
   <meta name="description" content={m.docs_meta_description()} />
   <meta property="og:title" content={m.docs_meta_title()} />
   <meta property="og:description" content={m.docs_meta_description()} />
-  <link rel="alternate" hreflang="en" href="/docs/" />
-  <link rel="alternate" hreflang="zh-CN" href="/zh/docs/" />
-  <link rel="alternate" hreflang="x-default" href="/docs/" />
+  <link
+    rel="canonical"
+    href={`https://www.nomo-lang.org${localizeHref("/docs/")}`}
+  />
+  <link
+    rel="alternate"
+    hreflang="en"
+    href="https://www.nomo-lang.org/docs/"
+  />
+  <link
+    rel="alternate"
+    hreflang="zh-CN"
+    href="https://www.nomo-lang.org/zh/docs/"
+  />
+  <link
+    rel="alternate"
+    hreflang="x-default"
+    href="https://www.nomo-lang.org/docs/"
+  />
 </svelte:head>
 
 <p class="docs-kicker">{m.docs_kicker()}</p>
@@ -68,12 +85,12 @@ nomo run hello.nomo
     </a>
   </li>
   <li>
-    <a href="https://github.com/nomo-lang/nomo/tree/main/docs/rfcs">
+    <a href="https://github.com/nomo-lang/rfcs">
       {m.docs_link_rfcs()} <span aria-hidden="true">↗</span>
     </a>
   </li>
   <li>
-    <a href="https://nomo-lang.github.io/nomo-playground/">
+    <a href="https://playground.nomo-lang.org/">
       {m.docs_link_playground()} <span aria-hidden="true">↗</span>
     </a>
   </li>
