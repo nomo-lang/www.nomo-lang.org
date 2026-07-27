@@ -1,80 +1,169 @@
 # Nomo website
 
-The official public site for the Nomo programming language.
+Source for the localized public website and entry documentation for the
+early-preview [Nomo language](https://www.nomo-lang.org).
 
-The site introduces Nomo's design principles, shows its source-to-C99 build
-path, and links directly to the published preview binaries. It is a statically
-prerendered SvelteKit and TypeScript application deployed on Cloudflare.
+Production origins:
+[www.nomo-lang.org](https://www.nomo-lang.org) and
+[nomo-lang.org](https://nomo-lang.org).
+
+## Status and compatibility
+
+The site presents Nomo's positioning, source-to-C99 build path, preview
+downloads, ecosystem navigation, and a short verified project workflow. It is a
+SvelteKit application deployed to Cloudflare Workers Static Assets.
+
+The current site source is commit
+[`aa6f412`](https://github.com/nomo-lang/www.nomo-lang.org/commit/aa6f412bc279647ea6b6c1eb4b37743a3395baff).
+Public downloads remain snapshot
+[`v0.0.0-20260721120555`](https://github.com/nomo-lang/nomo/releases/tag/v0.0.0-20260721120555);
+the canonical module-root and implicit-void snippets were reviewed against
+compiler commit
+[`6acff2b`](https://github.com/nomo-lang/nomo/commit/6acff2bba0113efa3d49254ec2b9c72e1d442b33).
+
+Nomo has no stable `v0.1.0` release. The site labels timestamp builds as
+Preview and must not turn current `main` behavior into a packaged-release or
+production-readiness claim.
+
+## Public quick start
+
+The localized docs at `/docs/` and `/zh/docs/` use the scaffolded project flow:
+
+```sh
+nomo --version
+nomo new hello-world
+cd hello-world
+nomo fmt .
+nomo check .
+nomo build .
+nomo run .
+```
+
+The checked compiler fixture at `tests/fixtures/hello-world.nomo` contains:
+
+```nomo
+package hello_world
+
+import std.io
+
+fn main() {
+    io.println("Hello, Nomo")
+}
+```
+
+Website tests keep the homepage, mdsvex documentation fence, and compiler
+fixture synchronized and reject `package app.main` or explicit no-return
+declarations on public pages.
+
+## Content responsibility
+
+| Source | Responsibility |
+| --- | --- |
+| `src/routes/+page.svelte` | Homepage structure and staged Nomo/C99/native example |
+| `src/routes/docs/+page.svx` | Localized entry documentation structure and code fences |
+| `messages/en.json`, `messages/zh.json` | Human-authored English and Simplified Chinese copy |
+| `src/lib/data/release.ts` | Published snapshot tag, platform assets, and download commands |
+| `tests/fixtures/hello-world.nomo` | Compiler-checked public snippet |
+| `project.inlang/` | Locale configuration |
+| `src/lib/paraglide/` | Generated type-safe messages; never edit manually |
+
+The website is a navigation and onboarding surface. Normative language behavior
+belongs in the bilingual SPEC and accepted RFCs; release readiness belongs in
+the release gate and per-release evidence.
+
+## Verified capabilities
+
+Repository tests cover:
+
+- locale key parity and localized metadata;
+- release tag, asset naming, and common platform detection;
+- canonical public syntax and synchronization with the compiler fixture;
+- Svelte and TypeScript diagnostics with warnings treated as failures;
+- prerendered localized pages and Cloudflare adapter output;
+- a Wrangler deploy dry-run for the complete Worker/assets bundle.
+
+The public Nomo snippet is separately checked with `nomoc`. These checks do not
+prove every external link, download, browser, or mobile viewport in production;
+the post-deployment smoke remains a separate gate.
 
 ## Local development
 
-Requires Node.js 24 and pnpm 11.
+Requires Node.js 24 and pnpm 11:
 
 ```sh
-pnpm install
+pnpm install --frozen-lockfile
 pnpm run dev
 ```
 
-Before opening a pull request, run the same checks used by CI:
+Run the full pull-request gate:
 
 ```sh
-pnpm run lint
+../nomo/target/debug/nomoc check tests/fixtures/hello-world.nomo
 pnpm test
+pnpm run lint
 pnpm run build
 pnpm run check:cloudflare
+git diff --check
 ```
 
-## Deployment
-
-The production target is Cloudflare Workers Static Assets. The checked-in
-`wrangler.jsonc` deploys the SvelteKit worker and its prerendered assets as one
-unit. Cloudflare custom domains are declared in the same file; the canonical
-public origin is `https://www.nomo-lang.org` and the apex origin advertises that
-canonical URL.
-
-To test the production runtime locally:
-
-```sh
-pnpm run preview
-```
-
-After authenticating Wrangler with the target Cloudflare account, deploy with:
-
-```sh
-pnpm run deploy
-```
-
-After the production deployment completes, run the HTTP acceptance smoke:
-
-```sh
-pnpm run smoke:production
-```
-
-For Cloudflare Git integration, use `pnpm run build` as the build command and
-`pnpm exec wrangler deploy` as the deploy command. The generated output lives in
-`.svelte-kit/cloudflare` and is served from the domain root.
+The sibling compiler command is the cross-repository documentation gate; CI
+inside this repository runs the Node/Svelte/Cloudflare checks.
 
 ## Internationalization
 
 English is served at `/` and Simplified Chinese at `/zh/`. Both variants are
-prerendered and set the correct document language. Internationalization uses
-the official Svelte Paraglide add-on: source messages live in
-`messages/en.json` and `messages/zh.json`, locale configuration lives in
-`project.inlang/settings.json`, and the generated type-safe runtime under
-`src/lib/paraglide` is not committed.
+prerendered, advertise the correct document language, and expose localized
+canonical and alternate URLs.
 
-## Documentation
+Edit human copy only in `messages/en.json` and `messages/zh.json`. Keep the key
+sets synchronized. Paraglide output under `src/lib/paraglide` is generated by
+the `prepare` script and is not committed.
 
-The localized documentation entry points are `/docs/` and `/zh/docs/`.
-Documentation pages use mdsvex, so Markdown code fences and Svelte components
-can live in the same `.svx` source. User-facing prose remains in the Paraglide
-message catalogs to keep both locales in sync.
+Documentation pages use mdsvex so Markdown code fences and Svelte components
+can coexist in `.svx` sources. User-facing prose remains in the message
+catalogs.
 
-## Content sources
+## Deployment
 
-Release versions and asset names live in `src/lib/data/release.ts`. Update them
-from the corresponding signed release in
-[`nomo-lang/nomo`](https://github.com/nomo-lang/nomo/releases).
+`wrangler.jsonc` declares the `www` and apex custom domains and deploys the
+SvelteKit Worker plus `.svelte-kit/cloudflare` assets as one unit.
 
-Organization-wide contribution, security, and support guidance is inherited
-from [`nomo-lang/.github`](https://github.com/nomo-lang/.github).
+Safe pre-deployment checks:
+
+```sh
+pnpm run build
+pnpm run check:cloudflare
+```
+
+Production actions:
+
+```sh
+pnpm run deploy
+pnpm run smoke:production
+```
+
+`deploy` changes the public site and requires the target Cloudflare account.
+Run the HTTP smoke only after the deployment reaches a terminal successful
+state. Cloudflare Git integration uses `pnpm run build` and
+`pnpm exec wrangler deploy`.
+
+## Release and content updates
+
+Update `src/lib/data/release.ts` only from a published, signed
+[`nomo` release](https://github.com/nomo-lang/nomo/releases). Validate every
+asset name and download URL; do not advance the site to an unpublished compiler
+commit.
+
+Syntax updates must follow their RFC and update homepage code, documentation,
+localized explanatory copy, the compiler fixture, tests, Playground, and
+editor entry points together.
+
+For authority and contribution, see the
+[English specification](https://github.com/nomo-lang/rfcs/blob/main/en/SPEC.md),
+[中文规范](https://github.com/nomo-lang/rfcs/blob/main/zh-CN/SPEC.md),
+[RFC index](https://github.com/nomo-lang/rfcs), and
+[shared contribution guide](https://github.com/nomo-lang/.github/blob/main/CONTRIBUTING.md).
+
+## License
+
+See [LICENSE](LICENSE).
