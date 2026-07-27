@@ -27,7 +27,7 @@
 
   const sourceLines: Record<CodeView, CodeToken[][]> = {
     nomo: [
-      [token("package", "token-keyword"), token(" app.main")],
+      [token("package", "token-keyword"), token(" hello_world")],
       [token(" ")],
       [token("import", "token-keyword"), token(" std.io")],
       [token(" ")],
@@ -35,9 +35,7 @@
         token("fn", "token-keyword"),
         token(" "),
         token("main", "token-fn"),
-        token("() -> "),
-        token("void", "token-type"),
-        token(" {"),
+        token("() {"),
       ],
       [
         token("  io.println("),

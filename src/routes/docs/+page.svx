@@ -43,18 +43,19 @@
 
 ```sh
 nomo --version
-nomo check hello.nomo
+nomo new hello-world
+cd hello-world
 ```
 
 <h2>{m.docs_create_title()}</h2>
 <p>{m.docs_create_body()}</p>
 
 ```nomo
-package app.main
+package hello_world
 
 import std.io
 
-fn main() -> void {
+fn main() {
     io.println("Hello, Nomo")
 }
 ```
@@ -63,10 +64,10 @@ fn main() -> void {
 <p>{m.docs_run_body()}</p>
 
 ```sh
-nomo fmt hello.nomo
-nomo check hello.nomo
-nomo build hello.nomo
-nomo run hello.nomo
+nomo fmt .
+nomo check .
+nomo build .
+nomo run .
 ```
 
 <h2>{m.docs_language_title()}</h2>
